@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex,nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login for Stripe Customer Portal — Branded Stripe Billing Login for WordPress</title>
+    <meta name="description" content="A branded Stripe Customer Portal login page on your WordPress site. Passwordless magic-link email authentication, custom slug or shortcode, hardened against email enumeration. Free on WordPress.org. PRO from $79/yr.">
+    <meta name="keywords" content="stripe customer portal WordPress, stripe billing login WordPress, magic link login WordPress, stripe customer portal login plugin, stripe portal shortcode, branded customer portal stripe">
+    <link rel="canonical" href="/customer-portal-plugin/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Login for Stripe Customer Portal — Branded Stripe Billing Login for WordPress">
+    <meta property="og:description" content="A branded Stripe Customer Portal login page on your WordPress site. Magic-link email authentication, custom slug or shortcode. Free on WordPress.org.">
+    <meta property="og:url" content="/customer-portal-plugin/">
+    <meta property="og:image" content="/customer-portal-plugin/assets/screenshots/login-form-endpoint.png">
+    <meta property="og:site_name" content="Login for Stripe Customer Portal">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Login for Stripe Customer Portal — Stripe Billing Login for WordPress">
+    <meta name="twitter:description" content="Branded magic-link login for the Stripe Customer Portal on WordPress. Free on WordPress.org.">
+    <meta name="twitter:image" content="/customer-portal-plugin/assets/screenshots/login-form-endpoint.png">
+
+    <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+    <link href="assets/fonts/inter.css" rel="stylesheet">
+    <script src="assets/vendor/tailwind.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50:  '#EEF2FF',
+                            100: '#E0E7FF',
+                            200: '#C7D2FE',
+                            300: '#A5B4FC',
+                            400: '#818CF8',
+                            500: '#6366F1',
+                            600: '#4F46E5',
+                            700: '#4338CA',
+                            800: '#3730A3',
+                            900: '#312E81'
+                        },
+                        accent: {
+                            50:  '#ECFDF5',
+                            100: '#D1FAE5',
+                            500: '#10B981',
+                            600: '#059669',
+                            700: '#047857'
+                        },
+                        surface: {
+                            50:  '#F8FAFC',
+                            100: '#F1F5F9',
+                            200: '#E2E8F0'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-hero { background: linear-gradient(135deg, #312E81 0%, #4F46E5 55%, #10B981 100%); }
+        .gradient-cta  { background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #059669 100%); }
+        .gradient-text { background: linear-gradient(135deg, #C7D2FE, #6EE7B7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .card-hover    { transition: transform 0.2s, box-shadow 0.2s; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(79, 70, 229, 0.18); }
+        .fade-in       { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-mock     { background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 25px 80px -20px rgba(49, 46, 129, 0.35), 0 10px 30px -10px rgba(16, 185, 129, 0.18); }
+        .mono          { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Login for Stripe Customer Portal",
+        "description": "WordPress plugin that adds a branded Stripe Customer Portal login page on your domain. Passwordless magic-link email authentication, custom login endpoint or shortcode, hardened against email enumeration. Free on WordPress.org, PRO unlocks branded email templates, form styler, WooCommerce / MemberPress / LearnDash integrations, Stripe-webhook role automation, multi-Stripe-account support, and agency white-label.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "WordPress",
+        "offers": [
+            { "@type": "Offer", "price": "0",   "priceCurrency": "USD", "name": "Free" },
+            { "@type": "Offer", "price": "79",  "priceCurrency": "USD", "name": "PRO (1 site)" },
+            { "@type": "Offer", "price": "159", "priceCurrency": "USD", "name": "PRO (3 sites)" },
+            { "@type": "Offer", "price": "299", "priceCurrency": "USD", "name": "PRO (25 sites)" },
+            { "@type": "Offer", "price": "499", "priceCurrency": "USD", "name": "PRO (100 sites)" }
+        ],
+        "author": {
+            "@type": "Organization",
+            "name": "Gaucho Plugins",
+            "url": "https://gauchoplugins.com"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Gaucho Plugins",
+        "legalName": "Brand on Fire LLC",
+        "url": "https://gauchoplugins.com",
+        "logo": "/customer-portal-plugin/assets/icon.png",
+        "founder": { "@type": "Person", "name": "Brandon Ernst" },
+        "sameAs": [
+            "https://wordpress.org/plugins/login-stripe-customer-portal/",
+            "https://gauchoplugins.com"
+        ]
+    }
+    </script>
+    <!-- gp-agentic-commerce:start -->
+    <!-- Agentic commerce: AI agents can discover and purchase programmatically. -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Login for Stripe Customer Portal (premium license)",
+  "description": "Login for Stripe Customer Portal adds a branded, passwordless magic-link login page on your WordPress domain that takes customers straight to the Stripe Customer Portal to manage subscriptions, invoices, and payment methods.",
+  "brand": {
+    "@type": "Brand",
+    "name": "Gaucho Plugins"
+  },
+  "image": "https://gauchoplugins.com/wp-content/uploads/product-feed/login-stripe-customer-portal.png",
+  "url": "/customer-portal-plugin/",
+  "offers": [
+    {
+      "@type": "Offer",
+      "sku": "lscp-pro-1",
+      "name": "Login for Stripe Customer Portal PRO - 1 site (annual license)",
+      "price": "79",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": "/customer-portal-plugin/"
+    },
+    {
+      "@type": "Offer",
+      "sku": "lscp-pro-3",
+      "name": "Login for Stripe Customer Portal PRO - 3 sites (annual license)",
+      "price": "159",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": "/customer-portal-plugin/"
+    },
+    {
+      "@type": "Offer",
+      "sku": "lscp-pro-25",
+      "name": "Login for Stripe Customer Portal PRO - 25 sites (annual license)",
+      "price": "299",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": "/customer-portal-plugin/"
+    },
+    {
+      "@type": "Offer",
+      "sku": "lscp-pro-100",
+      "name": "Login for Stripe Customer Portal PRO - 100 sites (annual license)",
+      "price": "499",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": "/customer-portal-plugin/"
+    }
+  ]
+}
+    </script>
+    <!-- gp-agentic-commerce:end -->
+</head>
+<body class="font-sans text-gray-800 bg-white antialiased">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="./" class="flex items-center" aria-label="Customer Portal Plugin home">
+                    <img src="assets/logo.svg" alt="Customer Portal Plugin" class="h-8 w-auto">
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="https://wordpress.org/plugins/login-stripe-customer-portal/" target="_blank" rel="noopener" class="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors">Download Free</a>
+                    <a href="#features" class="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors">Features</a>
+                    <a href="#how" class="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors">How it works</a>
+                    <a href="faq/" class="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors">FAQ</a>
+                    <a href="https://docs.customerportalplugin.com/" target="_blank" rel="noopener" class="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors">Docs</a>
+                    <a href="pricing/" class="inline-flex items-center px-4 py-2 bg-brand-600 text-white text-sm font-semibold rounded-lg hover:bg-brand-700 transition-colors shadow-sm">Get the Plugin</a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600 hover:text-brand-600" aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col gap-3">
+                    <a href="https://wordpress.org/plugins/login-stripe-customer-portal/" target="_blank" rel="noopener" class="text-sm font-medium text-gray-600 hover:text-brand-600 py-1">Download Free</a>
+                    <a href="#features" class="text-sm font-medium text-gray-600 hover:text-brand-600 py-1">Features</a>
+                    <a href="#how" class="text-sm font-medium text-gray-600 hover:text-brand-600 py-1">How it works</a>
+                    <a href="faq/" class="text-sm font-medium text-gray-600 hover:text-brand-600 py-1">FAQ</a>
+                    <a href="https://docs.customerportalplugin.com/" target="_blank" rel="noopener" class="text-sm font-medium text-gray-600 hover:text-brand-600 py-1">Docs</a>
+                    <a href="pricing/" class="inline-flex items-center justify-center px-4 py-2 bg-brand-600 text-white text-sm font-semibold rounded-lg hover:bg-brand-700 transition-colors shadow-sm mt-2">Get the Plugin</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="gradient-hero pt-32 pb-20 lg:pt-40 lg:pb-28">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="fade-in">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full text-sm text-indigo-100 mb-6 backdrop-blur-sm border border-white/20">
+                            <svg class="w-4 h-4 text-emerald-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>Available free on WordPress.org &mdash; PRO via Freemius</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+                            A branded Stripe Customer Portal login <span class="gradient-text">on your domain.</span>
+                        </h1>
+                        <p class="text-lg lg:text-xl text-indigo-100 mb-8 max-w-xl leading-relaxed">
+                            Stop sending customers to a generic Stripe URL. Add a passwordless, magic-link login page on your WordPress site &mdash; then hand off to the Stripe-hosted Customer Portal for self-service billing.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                            <a href="https://wordpress.org/plugins/login-stripe-customer-portal/" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-6 py-3.5 bg-white text-brand-700 font-semibold rounded-lg hover:bg-indigo-50 transition-colors shadow-lg text-base">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Download Free
+                            </a>
+                            <a href="pricing/" class="inline-flex items-center justify-center px-6 py-3.5 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors border border-white/30 text-base backdrop-blur-sm">
+                                See PRO Pricing &rarr;
+                            </a>
+                        </div>
+                        <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-indigo-100">
+                            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-emerald-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Free Forever</span>
+                            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-emerald-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> 30-Day Refund</span>
+                            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-emerald-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Works with any Stripe Customer Portal</span>
+                        </div>
+                    </div>
+                    <div class="fade-in">
+                        <!-- Hero mock: decorative only (not a real form) -->
+                        <div class="hero-mock rounded-2xl overflow-hidden p-8 lg:p-10 select-none pointer-events-none" aria-hidden="true">
+                            <div class="text-xs text-gray-400 mono mb-4">https://yoursite.com/customer-portal/</div>
+                            <div class="text-xl font-bold text-gray-900 mb-1">Customer Portal Login</div>
+                            <p class="text-sm text-gray-500 mb-6">Enter your email to receive a secure login link.</p>
+                            <div class="block text-xs font-medium text-gray-700 mb-1.5">Email address</div>
+                            <div class="flex items-center gap-2 mb-5">
+                                <div class="flex-1 px-3.5 py-2.5 text-sm rounded-lg border border-gray-200 bg-white text-gray-800">jane@example.com</div>
+                            </div>
+                            <div class="w-full px-4 py-3 bg-brand-600 text-white text-sm font-semibold rounded-lg shadow-md flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                Send me a login link
+                            </div>
+                            <div class="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                                <span class="flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                                    Passwordless &mdash; tokens hashed at rest
+                                </span>
+                                <span class="mono">stripe.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust strip -->
+        <section class="bg-white border-b border-gray-100 py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs sm:text-sm text-gray-700">
+                    <span class="inline-flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m0 0v2m0-2h2m-2 0H10m9-9V7a2 2 0 00-2-2H7a2 2 0 00-2 2v4m14 0v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6m14 0H5"/></svg>
+                        Magic-link auth, no passwords
+                    </span>
+                    <span class="inline-flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        SHA-256 hashed tokens
+                    </span>
+                    <span class="inline-flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        Rate-limited (5/10 min)
+                    </span>
+                    <span class="inline-flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        Constant-response (no email enumeration)
+                    </span>
+                    <span class="inline-flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        GDPR exporter &amp; eraser
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section id="features" class="py-20 lg:py-28 bg-surface-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="inline-block text-xs font-semibold tracking-widest text-brand-600 uppercase mb-3">Built for serious Stripe operators</span>
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">Everything you need to put Stripe billing on your domain.</h2>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto">Login for Stripe Customer Portal is the WordPress entry point for the Stripe-hosted Customer Portal. Customers log in on your site; Stripe still hosts the billing UI.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- F1 -->
+                    <div class="bg-white rounded-2xl p-7 border border-gray-100 card-hover">
+                        <div class="w-11 h-11 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Magic-link email login</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Customers enter their email and receive a secure, time-limited login link. No passwords on your site, no support tickets to reset them. Links expire after one hour.</p>
+                    </div>
+                    <!-- F2 -->
+                    <div class="bg-white rounded-2xl p-7 border border-gray-100 card-hover">
+                        <div class="w-11 h-11 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Custom URL or shortcode</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Choose any slug for the login page (e.g. <span class="mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">/customer-portal/</span>) or embed the form anywhere with <span class="mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">[login-stripe-customer-portal]</span>.</p>
+                    </div>
+                    <!-- F3 -->
+                    <div class="bg-white rounded-2xl p-7 border border-gray-100 card-hover">
+                        <div class="w-11 h-11 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Payments-grade hardening</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Tokens SHA-256 hashed at rest. Per-email + per-IP rate limiter. Constant-response wording prevents the page from being used as an email-enumeration oracle against your customer list.</p>
+                    </div>
+                    <!-- F4 -->
+                    <div class="bg-white rounded-2xl p-7 border border-gray-100 card-hover">
+                        <div class="w-11 h-11 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Restrict who can log in</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Optionally limit access to existing Stripe customers only, or allow new emails to register through the flow (a Stripe customer is auto-created on first redemption).</p>
+                    </div>
+                    <!-- F5 -->
+                    <div class="bg-white rounded-2xl p-7 border border-gray-100 card-hover">
+                        <div class="w-11 h-11 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Custom post-logout redirect</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">When customers log out of the Stripe Customer Portal, send them back to a URL you control &mdash; not a generic Stripe page. Configurable from the settings screen.</p>
+                    </div>
+                    <!-- F6 -->
+                    <div class="bg-white rounded-2xl p-7 border border-gray-100 card-hover">
+                        <div class="w-11 h-11 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Developer extension surface</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">Documented filters and actions for every stage of the flow &mdash; email body, subject, headers, form template, login URL, return URL, message text, redirect target. Customize without forking.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it works -->
+        <section id="how" class="py-20 lg:py-28 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">From install to live in three steps.</h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">No code, no theme edits, no separate user accounts to sync.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="relative">
+                        <div class="absolute -top-3 left-0 px-3 py-1 bg-brand-600 text-white text-xs font-bold rounded-full">1</div>
+                        <div class="bg-surface-50 rounded-2xl p-7 border border-gray-100 h-full">
+                            <h3 class="text-lg font-bold text-gray-900 mb-3 mt-3">Paste your Stripe API key</h3>
+                            <p class="text-sm text-gray-600 mb-5 leading-relaxed">Drop your Stripe Secret Key into the settings page. The key is rendered as a fixed-length mask in source &mdash; no length leak.</p>
+                            <div class="rounded-lg overflow-hidden border border-gray-200">
+                                <img src="assets/screenshots/admin-settings-page.png" alt="Plugin settings page in WordPress admin showing the Stripe API key field and Customer Portal slug" class="w-full h-auto" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -top-3 left-0 px-3 py-1 bg-brand-600 text-white text-xs font-bold rounded-full">2</div>
+                        <div class="bg-surface-50 rounded-2xl p-7 border border-gray-100 h-full">
+                            <h3 class="text-lg font-bold text-gray-900 mb-3 mt-3">Pick a URL or use the shortcode</h3>
+                            <p class="text-sm text-gray-600 mb-5 leading-relaxed">Define a slug like <span class="mono text-xs bg-white px-1.5 py-0.5 rounded border border-gray-200">/customer-portal/</span> &mdash; or drop <span class="mono text-xs bg-white px-1.5 py-0.5 rounded border border-gray-200">[login-stripe-customer-portal]</span> on any page.</p>
+                            <div class="rounded-lg overflow-hidden border border-gray-200">
+                                <img src="assets/screenshots/login-form-shortcode.png" alt="The login form rendered on a WordPress page via the shortcode" class="w-full h-auto" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -top-3 left-0 px-3 py-1 bg-brand-600 text-white text-xs font-bold rounded-full">3</div>
+                        <div class="bg-surface-50 rounded-2xl p-7 border border-gray-100 h-full">
+                            <h3 class="text-lg font-bold text-gray-900 mb-3 mt-3">Customer clicks the magic link</h3>
+                            <p class="text-sm text-gray-600 mb-5 leading-relaxed">They receive a secure 1-hour link by email. One click drops them in the Stripe-hosted Customer Portal to manage subscriptions and payment methods.</p>
+                            <div class="rounded-lg overflow-hidden border border-gray-200">
+                                <img src="assets/screenshots/email-login-link.png" alt="The magic-link login email customers receive" class="w-full h-auto" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stripe-hosted portal screenshot -->
+        <section class="py-20 lg:py-24 bg-surface-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <span class="inline-block text-xs font-semibold tracking-widest text-brand-600 uppercase mb-3">Hands off the billing UI</span>
+                        <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-5">The login lives on your site. The billing UI is Stripe&rsquo;s.</h2>
+                        <p class="text-lg text-gray-600 mb-6 leading-relaxed">Once a customer redeems the magic link, they land in the official Stripe Customer Portal &mdash; PCI-aware, accessible, multi-language, and maintained by Stripe. You handle login. Stripe handles billing.</p>
+                        <ul class="space-y-3 text-sm text-gray-700">
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Update card &amp; payment methods</li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> View &amp; download invoices</li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Cancel, pause, or switch plans (if you allow it in Stripe)</li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Update tax IDs, billing email, and address</li>
+                        </ul>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden shadow-2xl ring-1 ring-gray-200">
+                        <img src="assets/screenshots/stripe-customer-portal.png" alt="The Stripe-hosted Customer Portal where customers manage their billing after logging in" class="w-full h-auto block" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRO highlight (1.1) -->
+        <section class="py-20 lg:py-28 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="inline-block text-xs font-semibold tracking-widest text-accent-600 uppercase mb-3">New in 1.1 &mdash; PRO release</span>
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">Six PRO unlocks for serious Stripe operators.</h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Every PRO tier &mdash; 1, 3, 25, or 100 sites &mdash; includes every feature below, white-label included. Pick the tier that matches your portfolio.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    <!-- P1 -->
+                    <div class="rounded-2xl p-7 bg-gradient-to-br from-brand-50 to-white border border-brand-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold rounded">PRO</span>
+                            <h3 class="text-base font-bold text-gray-900">Branded email templates</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed">6 designs, logo upload, brand colors, custom subject and CTA. Make the magic-link email look like it came from you, not from a generic WordPress mailer.</p>
+                    </div>
+                    <!-- P2 -->
+                    <div class="rounded-2xl p-7 bg-gradient-to-br from-brand-50 to-white border border-brand-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold rounded">PRO</span>
+                            <h3 class="text-base font-bold text-gray-900">Login-form styler</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed">Template library plus color pickers. Per-shortcode template overrides &mdash; different look on different pages without touching CSS.</p>
+                    </div>
+                    <!-- P3 -->
+                    <div class="rounded-2xl p-7 bg-gradient-to-br from-brand-50 to-white border border-brand-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold rounded">PRO</span>
+                            <h3 class="text-base font-bold text-gray-900">Woo / MemberPress / LearnDash</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed">Drop-in &ldquo;Manage Billing&rdquo; buttons. WP-user &harr; Stripe-customer bridge means existing logged-in members go straight to the portal, no second email step.</p>
+                    </div>
+                    <!-- P4 -->
+                    <div class="rounded-2xl p-7 bg-gradient-to-br from-brand-50 to-white border border-brand-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold rounded">PRO</span>
+                            <h3 class="text-base font-bold text-gray-900">Stripe webhook &rarr; WP roles</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed">Listen to Stripe events and grant or revoke WordPress roles by rule. Replaces a typical $99/yr SaaS membership tool &mdash; the rules live in your own database.</p>
+                    </div>
+                    <!-- P5 -->
+                    <div class="rounded-2xl p-7 bg-gradient-to-br from-brand-50 to-white border border-brand-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold rounded">PRO</span>
+                            <h3 class="text-base font-bold text-gray-900">Multi-Stripe-account support</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed">Run several Stripe accounts from one site. Route logins by URL slug, email domain, or WordPress role &mdash; one install, many businesses.</p>
+                    </div>
+                    <!-- P6 -->
+                    <div class="rounded-2xl p-7 bg-gradient-to-br from-brand-50 to-white border border-brand-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold rounded">PRO</span>
+                            <h3 class="text-base font-bold text-gray-900">Agency white-label</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed">Remove the &ldquo;Powered by Gaucho Plugins&rdquo; attribution. Included in every PRO tier &mdash; ship the plugin to clients under your own brand.</p>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <a href="pricing/" class="inline-flex items-center justify-center px-7 py-3.5 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition-colors shadow-md text-base">
+                        See PRO Pricing &rarr;
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Built for -->
+        <section class="py-16 lg:py-20 bg-surface-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-3">Built for the WordPress sites that need this most.</h2>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+                        <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+                        <h3 class="text-sm font-bold text-gray-900 mb-1">SaaS &amp; subscriptions</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Stripe Billing customers logging in to self-manage.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+                        <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+                        <h3 class="text-sm font-bold text-gray-900 mb-1">Membership sites</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Self-service billing without a separate SSO stack.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+                        <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
+                        <h3 class="text-sm font-bold text-gray-900 mb-1">Agencies</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Branded billing across a client portfolio. White-label included in every PRO tier.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 text-center">
+                        <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div>
+                        <h3 class="text-sm font-bold text-gray-900 mb-1">WooCommerce stores</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Customers update card details without a support ticket.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ teaser -->
+        <section class="py-20 lg:py-24 bg-white">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">Common questions.</h2>
+                    <p class="text-gray-600">A few of the most-asked. <a href="faq/" class="text-brand-600 font-semibold hover:underline">Read the full FAQ &rarr;</a></p>
+                </div>
+                <div class="space-y-4">
+                    <details class="group border border-gray-200 rounded-xl overflow-hidden">
+                        <summary class="flex items-center justify-between px-6 py-4 cursor-pointer text-sm font-semibold text-gray-900 hover:bg-surface-50 transition-colors">
+                            Does this plugin replace Stripe Billing or WooCommerce Subscriptions?
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </summary>
+                        <div class="px-6 pb-4 text-sm text-gray-600 leading-relaxed">No. It adds a WordPress login entry point for the Stripe Customer Portal. Your products, subscriptions, and billing logic stay in Stripe (or WooCommerce). The plugin just owns the login surface on your domain.</div>
+                    </details>
+                    <details class="group border border-gray-200 rounded-xl overflow-hidden">
+                        <summary class="flex items-center justify-between px-6 py-4 cursor-pointer text-sm font-semibold text-gray-900 hover:bg-surface-50 transition-colors">
+                            How does the magic-link login work?
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </summary>
+                        <div class="px-6 pb-4 text-sm text-gray-600 leading-relaxed">A customer enters their email. The plugin issues a secure token, hashes it before storing, and emails a one-hour login link. Clicking the link verifies the token and hands off to the Stripe-hosted Customer Portal.</div>
+                    </details>
+                    <details class="group border border-gray-200 rounded-xl overflow-hidden">
+                        <summary class="flex items-center justify-between px-6 py-4 cursor-pointer text-sm font-semibold text-gray-900 hover:bg-surface-50 transition-colors">
+                            Can I restrict login to existing Stripe customers only?
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </summary>
+                        <div class="px-6 pb-4 text-sm text-gray-600 leading-relaxed">Yes. A toggle in settings limits access to existing Stripe customers. With it off (the default) a Stripe customer is auto-created the first time a magic link is redeemed for a new email.</div>
+                    </details>
+                    <details class="group border border-gray-200 rounded-xl overflow-hidden">
+                        <summary class="flex items-center justify-between px-6 py-4 cursor-pointer text-sm font-semibold text-gray-900 hover:bg-surface-50 transition-colors">
+                            What ships in 1.1 PRO that isn&rsquo;t in the free version?
+                            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </summary>
+                        <div class="px-6 pb-4 text-sm text-gray-600 leading-relaxed">PRO unlocks branded magic-link email templates, the login-form styler, WooCommerce / MemberPress / LearnDash integration, a Stripe-webhook listener with rules-based WP role automation, multi-Stripe-account support, and agency white-label &mdash; included in every PRO tier.</div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="gradient-cta py-20 lg:py-24">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5">Put Stripe billing on your domain.</h2>
+                <p class="text-lg lg:text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">Free on WordPress.org. PRO from $79/yr &mdash; one plugin, one tier, every feature unlocked.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://wordpress.org/plugins/login-stripe-customer-portal/" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-7 py-3.5 bg-white text-brand-700 font-semibold rounded-lg hover:bg-indigo-50 transition-colors shadow-lg text-base">Download Free</a>
+                    <a href="pricing/" class="inline-flex items-center justify-center px-7 py-3.5 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors border border-white/30 text-base backdrop-blur-sm">See PRO Pricing &rarr;</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="assets/logo.svg" alt="Login for Stripe Customer Portal" class="h-8 w-auto brightness-0 invert">
+                    </div>
+                    <p class="text-sm leading-relaxed">A branded Stripe Customer Portal login on your WordPress site. By Gaucho Plugins.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold text-sm mb-3">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+                        <li><a href="pricing/" class="hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="faq/" class="hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="https://wordpress.org/plugins/login-stripe-customer-portal/" target="_blank" rel="noopener" class="hover:text-white transition-colors">WordPress.org</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold text-sm mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://docs.customerportalplugin.com/" target="_blank" rel="noopener" class="hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="https://wordpress.org/support/plugin/login-stripe-customer-portal/" target="_blank" rel="noopener" class="hover:text-white transition-colors">Support Forum</a></li>
+                        <li><a href="https://gauchoplugins.com" target="_blank" rel="noopener" class="hover:text-white transition-colors">Gaucho Plugins</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold text-sm mb-3">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="terms/" class="hover:text-white transition-colors">Terms</a></li>
+                        <li><a href="privacy/" class="hover:text-white transition-colors">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-6 flex flex-col sm:flex-row justify-between gap-3 text-xs">
+                <p>&copy; <span class="js-yr">2026</span> Brand on Fire LLC. All rights reserved.</p>
+                <p>Stripe and the Stripe logo are trademarks of Stripe, Inc. This plugin is not affiliated with or endorsed by Stripe.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+<script>document.querySelectorAll(".js-yr").forEach(function(e){e.textContent=new Date().getFullYear();});</script>
+<!-- bof-portfolio-bar --><a href="https://brandonfire.com/portfolio/" id="bof-portfolio-bar" rel="noopener" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;background:#0a0a0a;color:#ffffff !important;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:500;line-height:1;letter-spacing:.2px;padding:15px 18px;text-decoration:none !important;box-shadow:0 -3px 22px rgba(0,0,0,.45);border-top:2px solid #0033e7;box-sizing:border-box;"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB2aWV3Qm94PSIwIDAgOTUuNTMgOTUuNSI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOnVybCgjTmV3X0dyYWRpZW50X1N3YXRjaF8xKTt9LmNscy0ye2ZpbGw6dXJsKCNOZXdfR3JhZGllbnRfU3dhdGNoXzEtMik7fTwvc3R5bGU+PGxpbmVhckdyYWRpZW50IGlkPSJOZXdfR3JhZGllbnRfU3dhdGNoXzEiIHgxPSIyOS4yMSIgeTE9IjIyLjA3IiB4Mj0iMjkuMjEiIHkyPSIxMDAuMTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM4YmNjZmYiPjwvc3RvcD48c3RvcCBvZmZzZXQ9IjAuOTkiIHN0b3AtY29sb3I9IiMwMDMzZTciPjwvc3RvcD48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iTmV3X0dyYWRpZW50X1N3YXRjaF8xLTIiIHgxPSI1Ny4xOCIgeTE9IjIyLjA3IiB4Mj0iNTcuMTgiIHkyPSIxMDAuMTIiIHhsaW5rOmhyZWY9IiNOZXdfR3JhZGllbnRfU3dhdGNoXzEiPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTM2LjMzLDkzLjg1UzEzLjA4LDgzLjcxLDE3Ljc3LDYyLjM4YzMuNTgtMTYuMjEsNy43Ni0xNC4xNCw5Ljc2LTIyLjI2LDIuMi04LjkzLTEuMzctMTIuNjQtMS4zNy0xMi42NHM4Ljc2LDEuNDUsMTIuNzgsOC4xMWM1LjIyLDguNjUuOSwxOS4yLTUuMjMsMzEuNDdDMjguNzcsNzcsMjksODYuNDMsMzYuMzMsOTMuODVaIj48L3BhdGg+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNTEuODUsMHMtNC40LDEyLjY0LDUuOTEsMjYuNjZjNiw4LjIsMTMuMTksMTcuODYsMTYuMDgsMjMuMjJzOC45MywyMS41Ny0uNjksMzIuNDNTNTQuNzQsOTUuNSw1NC43NCw5NS41LDcwLjgxLDgwLjM4LDYyLjMsNjIuMzhjMCwwLTQsMTMuNDctMTQuNTcsMTcuNTlhNDAuNTEsNDAuNTEsMCwwLDAsMi42MS0yNUM0Ny4xOCw0MS41LDM3LDM4Ljc1LDM2LjA1LDI1LjE1LDM1LDkuOTMsNDUuMzksMS41MSw1MS44NSwwWiI+PC9wYXRoPjwvc3ZnPg==" alt="" width="28" height="28" style="display:block;flex:0 0 auto;width:28px;height:28px;"><span style="opacity:.95;color:#fff;">Archived portfolio project by <strong style="font-weight:700;color:#fff;">Brand&nbsp;on&nbsp;Fire</strong></span><span style="background:#0033e7;color:#fff;padding:11px 22px;border-radius:6px;font-weight:700;font-size:14px;white-space:nowrap;box-shadow:0 2px 10px rgba(0,51,231,.4);">View&nbsp;all&nbsp;work&nbsp;&rarr;</span></a><script>(function(){function p(){var b=document.getElementById("bof-portfolio-bar");if(b&&document.body)document.body.style.setProperty("padding-bottom",b.offsetHeight+"px","important");}if(document.readyState!=="loading")p();else document.addEventListener("DOMContentLoaded",p);window.addEventListener("resize",p);})();</script><script>/* Brand on Fire portfolio feedback collector. One shared origin (brand-on-fire.github.io) => one shared
+   localStorage; every comment is stamped with the site + page. Shadow DOM so the host site's CSS / its
+   pointer-events:none form-disable can't touch it. Shows this site's prior comments at the bottom, with a
+   ✓ on ones Claude resolved (read from /portfolio/resolved.json). "Export all" copies everything. */
+(function () {
+  var K = 'bof_feedback', D = document;
+  if (D.getElementById('bof-fb-host')) return;
+  function L() { try { return JSON.parse(localStorage.getItem(K)) || []; } catch (e) { return []; } }
+  function SV(a) { try { localStorage.setItem(K, JSON.stringify(a)); } catch (e) {} }
+  function slug() { var p = location.pathname.split('/').filter(Boolean); return p[0] || '(home)'; }
+  function pagePath() { var p = location.pathname.split('/').filter(Boolean); return '/' + p.slice(1).join('/') + (p.length > 1 ? '/' : ''); }
+  function ckey(c) { return c.site + '|' + (c.text || '').trim().toLowerCase(); }
+  function draftKey() { return 'bof_fb_draft'; }
+  function barH() { var b = D.getElementById('bof-portfolio-bar'); return b ? b.offsetHeight : 0; }
+  function counts() { var a = L(), s = slug(); return { here: a.filter(function (c) { return c.site === s; }).length, total: a.length }; }
+  function sync() { try { fetch('http://localhost:8799/sync', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(L()), keepalive: true }).catch(function () {}); } catch (e) {} }
+  var open = localStorage.getItem('bof_fb_open') === '1', RESOLVED = {};
+
+  var host = D.createElement('div'); host.id = 'bof-fb-host';
+  host.style.cssText = 'all:initial;position:fixed;left:0;right:0;bottom:0;z-index:2147483647;pointer-events:none';
+  var R = host.attachShadow({ mode: 'open' });
+  R.innerHTML =
+    '<style>' +
+    ':host{all:initial}div,textarea,button,span,b,ul,li{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;margin:0}' +
+    '.tog{position:fixed;right:14px;background:#0033e7;color:#fff;font-weight:700;font-size:13px;padding:9px 14px;border-radius:8px 8px 0 0;cursor:pointer;box-shadow:0 -2px 12px rgba(0,0,0,.45);pointer-events:auto;user-select:none}' +
+    '.pan{position:fixed;left:0;right:0;background:#0a0a0a;border-top:2px solid #0033e7;max-height:300px;padding:8px 12px 10px;display:none;pointer-events:auto;overflow:auto}' +
+    '.pan.open{display:block}' +
+    '.hd{display:flex;align-items:center;gap:8px;color:#fff;font-size:12.5px;margin-bottom:6px}.hd b{color:#8bccff}.hd .pg{color:#9aa3b2}' +
+    'textarea{display:block;width:100%;height:60px;background:#16181d;color:#fff;border:1px solid #2a2d35;border-radius:6px;padding:8px;font-size:13px;line-height:1.4;resize:none;pointer-events:auto;-webkit-user-select:text;user-select:text;outline:none}textarea:focus{border-color:#0033e7}' +
+    '.row{display:flex;gap:8px;align-items:center;margin-top:7px}' +
+    'button{border:0;border-radius:6px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;pointer-events:auto}' +
+    '.save{background:#0033e7;color:#fff}.exp{background:#16181d;color:#8bccff;border:1px solid #2a2d35}.undo{background:transparent;color:#888;font-weight:600;font-size:12px;padding:6px}' +
+    '.st{color:#9aa3b2;font-size:12px;margin-left:auto}' +
+    '.list{margin-top:9px;border-top:1px solid #20222c;padding-top:7px}' +
+    '.list .lt{color:#7a8290;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}' +
+    '.list li{list-style:none;display:flex;gap:7px;align-items:flex-start;color:#cfd4dc;font-size:12.5px;line-height:1.4;padding:4px 0;border-bottom:1px solid #16181d}' +
+    '.list li .ic{flex:0 0 auto;font-size:12px;width:14px}.list li.done{color:#7fce8a}.list li .ic.r{color:#36c24a}.list li .ic.p{color:#9aa3b2}' +
+    '</style>' +
+    '<div class="tog" id="tog"></div>' +
+    '<div class="pan" id="pan">' +
+    '<div class="hd">Commenting on <b id="site"></b><span class="pg" id="pg"></span></div>' +
+    '<textarea id="ta" placeholder="Type feedback for THIS page, then Save…"></textarea>' +
+    '<div class="row"><button class="save" id="save">Save</button><button class="undo" id="undo">Undo last</button><button class="exp" id="exp">Export all</button><span class="st" id="st"></span></div>' +
+    '<div class="list" id="list" style="display:none"><div class="lt" id="lt"></div><ul id="ul"></ul></div>' +
+    '</div>';
+  D.body.appendChild(host);
+
+  var tog = R.getElementById('tog'), pan = R.getElementById('pan'), ta = R.getElementById('ta');
+  R.getElementById('site').textContent = slug(); R.getElementById('pg').textContent = pagePath();
+  ta.value = localStorage.getItem(draftKey()) || '';
+  ta.addEventListener('input', function () { localStorage.setItem(draftKey(), ta.value); });
+
+  function renderList() {
+    var s = slug(), mine = L().filter(function (c) { return c.site === s; });
+    var box = R.getElementById('list'), ul = R.getElementById('ul'), lt = R.getElementById('lt');
+    if (!mine.length) { box.style.display = 'none'; return; }
+    box.style.display = 'block';
+    lt.textContent = 'Your comments on ' + s + ' (' + mine.length + ')';
+    ul.innerHTML = '';
+    mine.forEach(function (c) {
+      var done = !!RESOLVED[ckey(c)];
+      var li = D.createElement('li'); if (done) li.className = 'done';
+      li.innerHTML = '<span class="ic ' + (done ? 'r' : 'p') + '">' + (done ? '✓' : '•') + '</span><span>' + c.text.replace(/[<>&]/g, '') + (done ? '  <i style="color:#7fce8a;font-style:normal">— resolved</i>' : '') + '</span>';
+      ul.appendChild(li);
+    });
+  }
+  function refresh() {
+    var h = barH(), c = counts();
+    pan.style.bottom = h + 'px'; pan.classList.toggle('open', open);
+    tog.style.bottom = (open ? Math.min(pan.offsetHeight || 200, 300) + h : h) + 'px';
+    tog.textContent = '💬 Feedback (' + c.total + ') ' + (open ? '▾' : '▴');
+    R.getElementById('st').textContent = c.here + ' on this site · ' + c.total + ' total';
+    renderList();
+  }
+  tog.addEventListener('click', function () { open = !open; localStorage.setItem('bof_fb_open', open ? '1' : '0'); refresh(); if (open) setTimeout(function () { ta.focus(); }, 0); });
+  R.getElementById('save').addEventListener('click', function () {
+    var t = ta.value.trim(); if (!t) return;
+    var a = L(); a.push({ site: slug(), page: location.pathname, text: t, ts: new Date().toISOString() }); SV(a);
+    ta.value = ''; localStorage.removeItem(draftKey()); refresh(); sync();
+    var b = R.getElementById('save'); b.textContent = 'Saved ✓ ' + slug(); setTimeout(function () { b.textContent = 'Save'; }, 1100);
+  });
+  R.getElementById('undo').addEventListener('click', function () { var a = L(); if (!a.length) return; a.pop(); SV(a); refresh(); sync(); });
+  R.getElementById('exp').addEventListener('click', function () {
+    var a = L(); if (!a.length) { alert('No comments saved yet.'); return; }
+    var txt = 'PORTFOLIO FEEDBACK (' + a.length + ' comments)\n\n' + a.map(function (c) { return '[' + c.site + c.page + ']\n' + c.text; }).join('\n\n');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { alert('Copied ' + a.length + ' comments — paste to Claude.'); }, function () { window.prompt('Copy all (Cmd+C):', txt); });
+    else window.prompt('Copy all (Cmd+C):', txt);
+  });
+  // load Claude's resolved-comment list (cross-path same origin) so resolved items show a ✓
+  fetch('/portfolio/resolved.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : []; }).then(function (arr) {
+    (arr || []).forEach(function (k) { RESOLVED[String(k).toLowerCase()] = 1; }); renderList();
+  }).catch(function () {});
+  window.addEventListener('resize', refresh);
+  if (D.readyState !== 'loading') { refresh(); sync(); } else D.addEventListener('DOMContentLoaded', function () { refresh(); sync(); });
+})();
+</script><!-- /bof-portfolio-bar --></body>
+</html>

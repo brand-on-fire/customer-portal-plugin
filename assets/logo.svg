@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 36" role="img" aria-label="Customer Portal Plugin">
+  <!-- Card icon: indigo squircle, white card body, emerald magnetic stripe, indigo chip. -->
+  <svg x="2" y="4" width="28" height="28" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="112" ry="112" fill="#4F46E5"/>
+    <rect x="84" y="144" width="344" height="224" rx="28" fill="#FFFFFF"/>
+    <rect x="84" y="200" width="344" height="40" fill="#10B981"/>
+    <rect x="124" y="276" width="60" height="44" rx="8" fill="#4F46E5"/>
+    <rect x="208" y="284" width="156" height="12" rx="6" fill="#4F46E5" opacity="0.35"/>
+    <rect x="208" y="308" width="100" height="12" rx="6" fill="#4F46E5" opacity="0.35"/>
+  </svg>
+  <text x="40" y="23" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="700" fill="#0F172A" letter-spacing="-0.01em">Customer Portal Plugin</text>
+</svg>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Card. Credit-card silhouette. Filled white body, emerald magnetic stripe,
+     small white chip. Reads instantly as "billing / customer portal". -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" ry="112" fill="#4F46E5"/>
+  <!-- card body -->
+  <rect x="84" y="144" width="344" height="224" rx="28" fill="#FFFFFF"/>
+  <!-- magnetic stripe (emerald accent) -->
+  <rect x="84" y="200" width="344" height="40" fill="#10B981"/>
+  <!-- chip -->
+  <rect x="124" y="276" width="60" height="44" rx="8" fill="#4F46E5"/>
+  <!-- two contact lines suggesting card number -->
+  <rect x="208" y="284" width="156" height="12" rx="6" fill="#4F46E5" opacity="0.35"/>
+  <rect x="208" y="308" width="100" height="12" rx="6" fill="#4F46E5" opacity="0.35"/>
+</svg>
